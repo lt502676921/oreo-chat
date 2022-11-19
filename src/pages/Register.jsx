@@ -88,8 +88,7 @@ const Register = () => {
 
   return (
     <>
-      {/* {loading && <Loading />} */}
-      <Loading />
+      {loading && <Loading />}
       <div className="formContainer">
         <div className="formWrapper">
           <span className="logo">Oreo Chat</span>
