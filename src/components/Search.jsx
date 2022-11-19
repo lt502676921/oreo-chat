@@ -2,11 +2,11 @@ import React, { useContext, useState } from 'react'
 import { collection, query, where, getDocs, setDoc, doc, updateDoc, serverTimestamp, getDoc } from 'firebase/firestore'
 import { db } from '../firebase'
 import { AuthContext } from '../context/AuthContext'
+import { message } from '../MessageManager'
 
 const Search = () => {
   const [username, setUsername] = useState('')
   const [user, setUser] = useState(null)
-  const [err, setErr] = useState(false)
 
   const { currentUser } = useContext(AuthContext)
 
@@ -19,7 +19,7 @@ const Search = () => {
         setUser(doc.data())
       })
     } catch (err) {
-      setErr(true)
+      message.error('User not found!')
     }
   }
 
@@ -69,7 +69,6 @@ const Search = () => {
           value={username}
         />
       </div>
-      {err && <span>User not found!</span>}
       {user && (
         <div className="userChat" onClick={handleSelect}>
           <img src={user.photoURL} alt="" />

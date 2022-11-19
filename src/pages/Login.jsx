@@ -1,10 +1,9 @@
-import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../firebase'
+import { message } from '../MessageManager'
 
 const Login = () => {
-  const [err, setErr] = useState(false)
   const navigate = useNavigate()
 
   const handleSubmit = async e => {
@@ -16,7 +15,7 @@ const Login = () => {
       await signInWithEmailAndPassword(auth, email, password)
       navigate('/')
     } catch (err) {
-      setErr(true)
+      message.error('Something went wrong')
     }
   }
 
@@ -29,7 +28,6 @@ const Login = () => {
           <input type="email" placeholder="email" />
           <input type="password" placeholder="password" />
           <button>Sign in</button>
-          {err && <span>Something went wrong</span>}
         </form>
         <p>
           You don't have an account?

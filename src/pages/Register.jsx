@@ -5,9 +5,9 @@ import { auth, db, storage } from '../firebase'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import { doc, setDoc } from 'firebase/firestore'
 import Add from '../img/addAvatar.png'
+import { message } from '../MessageManager'
 
 const Register = () => {
-  const [err, setErr] = useState(false)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
@@ -32,7 +32,7 @@ const Register = () => {
       uploadTask.on(
         error => {
           console.log(error)
-          setErr(true)
+          message.error('Something went wrong')
           setLoading(false)
         },
         () => {
@@ -74,13 +74,13 @@ const Register = () => {
       //       // navigate('/')
       //     } catch (err) {
       //       console.log(err)
-      //       setErr(true)
+      //       message.error('Something went wrong')
       //       setLoading(false)
       //     }
       //   })
       // })
     } catch (err) {
-      setErr(true)
+      message.error('Something went wrong')
       setLoading(false)
     }
   }
@@ -101,7 +101,6 @@ const Register = () => {
           </label>
           <button disabled={loading}>Sign up</button>
           {loading && 'Uploading and compressing the image please wait...'}
-          {err && <span>Something went wrong</span>}
         </form>
         <p>
           You do have an account?
