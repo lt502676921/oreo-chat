@@ -6,6 +6,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import { doc, setDoc } from 'firebase/firestore'
 import Add from '../img/addAvatar.png'
 import { message } from '../MessageManager'
+import Loading from '../components/Loading'
 
 const Register = () => {
   const [loading, setLoading] = useState(false)
@@ -86,28 +87,32 @@ const Register = () => {
   }
 
   return (
-    <div className="formContainer">
-      <div className="formWrapper">
-        <span className="logo">Oreo Chat</span>
-        <span className="title">Register</span>
-        <form onSubmit={handleSubmit}>
-          <input required type="text" placeholder="display name" />
-          <input required type="email" placeholder="email" />
-          <input required type="password" placeholder="password" />
-          <input required style={{ display: 'none' }} type="file" id="file" />
-          <label htmlFor="file">
-            <img src={Add} alt="" />
-            <span>Add an avatar</span>
-          </label>
-          <button disabled={loading}>Sign up</button>
-          {loading && 'Uploading and compressing the image please wait...'}
-        </form>
-        <p>
-          You do have an account?
-          <Link to="/login">Login</Link>
-        </p>
+    <>
+      {/* {loading && <Loading />} */}
+      <Loading />
+      <div className="formContainer">
+        <div className="formWrapper">
+          <span className="logo">Oreo Chat</span>
+          <span className="title">Register</span>
+          <form onSubmit={handleSubmit}>
+            <input required type="text" placeholder="display name" />
+            <input required type="email" placeholder="email" />
+            <input required type="password" placeholder="password" />
+            <input required style={{ display: 'none' }} type="file" id="file" />
+            <label htmlFor="file">
+              <img src={Add} alt="" />
+              <span>Add an avatar</span>
+            </label>
+            <button disabled={loading}>Sign up</button>
+            {loading && 'Uploading and compressing the image please wait...'}
+          </form>
+          <p>
+            You do have an account?
+            <Link to="/login">Login</Link>
+          </p>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
