@@ -5,6 +5,7 @@ import Register from './pages/Register'
 import Login from './pages/Login'
 import Home from './pages/Home'
 import './style.scss'
+import Loading from './components/Loading'
 
 function App() {
   const { currentUser } = useContext(AuthContext)
@@ -18,22 +19,25 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/">
-          <Route
-            index
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <>
+      {currentUser && JSON.stringify(currentUser) === '{}' && <Loading />}
+      <BrowserRouter>
+        <Routes>
+          <Route path="/">
+            <Route
+              index
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </>
   )
 }
 
