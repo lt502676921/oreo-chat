@@ -1,6 +1,8 @@
 import './index.css'
 
-const Loading = () => {
+const Loading = props => {
+  const { content } = props
+
   return (
     <div className="mask">
       <div className="loadingContainer">
@@ -14,6 +16,7 @@ const Loading = () => {
             <div className="shadow"></div>
           </div>
         </div>
+        {content && <div className="loadingContent">{content}</div>}
       </div>
     </div>
   )

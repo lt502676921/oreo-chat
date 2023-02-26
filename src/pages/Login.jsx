@@ -1,23 +1,23 @@
-import { useNavigate, Link } from 'react-router-dom'
-import { signInWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '../firebase'
-import { message } from '../MessageManager'
+import { useNavigate, Link } from 'react-router-dom';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase';
+import message from '../components/Message/index';
 
 const Login = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleSubmit = async e => {
-    e.preventDefault()
-    const email = e.target[0].value
-    const password = e.target[1].value
+    e.preventDefault();
+    const email = e.target[0].value;
+    const password = e.target[1].value;
 
     try {
-      await signInWithEmailAndPassword(auth, email, password)
-      navigate('/')
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate('/');
     } catch (err) {
-      message.error('Something went wrong')
+      message.open({ type: 'error', content: 'Something went wrong' });
     }
-  }
+  };
 
   return (
     <div className="formContainer">
@@ -35,7 +35,7 @@ const Login = () => {
         </p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

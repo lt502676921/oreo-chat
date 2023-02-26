@@ -11,8 +11,15 @@
   height: 100vh;
   width: 100vw;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+.loadingContainer .loadingContent {
+  margin-top: 40px;
+  font-size: 25px;
+  color: #fff;
+  animation: loading 1s linear infinite;
 }
 
 .flex-center {
@@ -103,5 +110,14 @@
   to {
     transform: scaleX(0.2);
     opacity: 0.4;
+  }
+}
+
+@keyframes loading {
+  40% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 0;
   }
 }

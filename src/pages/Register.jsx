@@ -1,58 +1,58 @@
-import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
-import { auth, db, storage } from '../firebase'
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
-import { doc, setDoc } from 'firebase/firestore'
-import Add from '../img/addAvatar.png'
-import { message } from '../MessageManager'
-import Loading from '../components/Loading'
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { auth, db, storage } from '../firebase';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { doc, setDoc } from 'firebase/firestore';
+import Add from '../img/addAvatar.png';
+import message from '../components/Message/index';
+import Loading from '../components/Loading';
 
 const Register = () => {
-  const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async e => {
-    setLoading(true)
-    e.preventDefault()
-    const displayName = e.target[0].value
-    const email = e.target[1].value
-    const password = e.target[2].value
-    const file = e.target[3].files[0]
+    setLoading(true);
+    e.preventDefault();
+    const displayName = e.target[0].value;
+    const email = e.target[1].value;
+    const password = e.target[2].value;
+    const file = e.target[3].files[0];
 
     try {
       //Create user
-      const res = await createUserWithEmailAndPassword(auth, email, password)
+      const res = await createUserWithEmailAndPassword(auth, email, password);
 
       //Create a unique image name
-      const date = new Date().getTime()
-      const storageRef = ref(storage, `${displayName + date}`)
+      const date = new Date().getTime();
+      const storageRef = ref(storage, `${displayName + date}`);
 
-      const uploadTask = uploadBytesResumable(storageRef, file)
+      const uploadTask = uploadBytesResumable(storageRef, file);
 
       uploadTask.on(
         error => {
-          console.log(error)
-          message.error('Something went wrong')
-          setLoading(false)
+          console.log(error);
+          message.open({ type: 'error', content: 'Something went wrong' });
+          setLoading(false);
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then(async downloadURL => {
             await updateProfile(res.user, {
               displayName,
               photoURL: downloadURL,
-            })
+            });
             await setDoc(doc(db, 'users', res.user.uid), {
               uid: res.user.uid,
               displayName,
               email,
               photoURL: downloadURL,
-            })
-            await setDoc(doc(db, 'userChats', res.user.uid), {})
-            navigate('/')
-          })
+            });
+            await setDoc(doc(db, 'userChats', res.user.uid), {});
+            navigate('/');
+          });
         }
-      )
+      );
 
       // await uploadBytesResumable(storageRef, file).then(() => {
       //   getDownloadURL(storageRef).then(async downloadURL => {
@@ -81,14 +81,14 @@ const Register = () => {
       //   })
       // })
     } catch (err) {
-      message.error('Something went wrong')
-      setLoading(false)
+      message.error('Something went wrong');
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <>
-      {loading && <Loading />}
+      {loading && <Loading content="Uploading and compressing the image please wait..." />}
       <div className="formContainer">
         <div className="formWrapper">
           <span className="logo">Oreo Chat</span>
@@ -103,7 +103,6 @@ const Register = () => {
               <span>Add an avatar</span>
             </label>
             <button disabled={loading}>Sign up</button>
-            {loading && 'Uploading and compressing the image please wait...'}
           </form>
           <p>
             You do have an account?
@@ -112,7 +111,7 @@ const Register = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;
