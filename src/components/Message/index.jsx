@@ -104,20 +104,28 @@ function MessageManager() {
   return <MessageContainer ref={msgRef} messageList={messageList} setMessageList={setMessageList} />;
 }
 
+let taskQueue = [];
+function flushQueue() {
+  if (!containerRoot || !message.current) {
+    renderMessageRoot();
+    setTimeout(flushQueue);
+    return;
+  }
+
+  taskQueue.forEach(msg => {
+    message[msg.type](msg.content);
+  });
+
+  taskQueue = [];
+}
+
 const message = {
   current: null,
   open: ({ type = 'info', content }) => {
-    if (containerRoot) {
-      message[type](content);
-    } else {
-      renderMessageRoot();
-      nextTick(() => {
-        if (message[type]) {
-          message[type](content);
-        } else {
-        }
-      });
-    }
+    nextTick(() => {
+      taskQueue.push({ type, content });
+    });
+    flushQueue();
   },
 };
 
